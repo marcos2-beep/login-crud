@@ -52,7 +52,7 @@ export default function RegisterScreen() {
       Alert.alert("Éxito", "Cuenta creada correctamente.", [
         { text: "Ir a Login", onPress: () => router.push("/login") },
       ]);
-    } catch (error) {
+    } catch {
       return Alert.alert(
         "Error de conexión",
         "No se pudo conectar con el servidor. Intenta nuevamente."
