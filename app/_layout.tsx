@@ -15,11 +15,13 @@ function RootLayoutNav() {
   useEffect(() => {
     if (!mounted) return; // Don't navigate until mounted
 
+    const isAuthenticated = !!user?.token;
     const isOnLogin = pathname === "/login" || pathname === "/";
 
-    if (!user && !isOnLogin) {
+    // Si no hay token válido, siempre forzar al login
+    if (!isAuthenticated && !isOnLogin) {
       router.replace("/login");
-    } else if (user && isOnLogin) {
+    } else if (isAuthenticated && isOnLogin) {
       router.replace("/(tabs)");
     }
   }, [user, pathname, router, mounted]);

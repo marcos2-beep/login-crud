@@ -1,9 +1,9 @@
 import { User } from '@/constants/types';
 import { authService } from '@/services/auth.service';
 import {
-  clearSessionFromStorage,
-  loadSessionFromStorage,
-  saveSessionToStorage,
+    clearSessionFromStorage,
+    loadSessionFromStorage,
+    saveSessionToStorage,
 } from '@/utils/storage';
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 
@@ -25,7 +25,15 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     loadSessionFromStorage().then((session) => {
-      if (session) setUser(session);
+      // Solo restaurar sesión si existe un token válido
+      if (session && session.token) {
+        setUser(session);
+      } else if (session && !session.token) {
+        // Limpia sesiones antiguas/invalidas que no tengan token
+        clearSessionFromStorage().catch((error) => {
+          console.error('No se pudo limpiar una sesión inválida:', error);
+        });
+      }
     });
   }, []);
 

@@ -2,7 +2,7 @@ import Button from "@/components/ui/button";
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useAuth } from "../components/context/auth-context";
 
@@ -23,7 +23,6 @@ export default function LoginScreen() {
     if (!result.success) {
       const msg = result.error ?? "Email o contraseña incorrectos";
       setErrorMsg(msg);
-      Alert.alert("Error", msg);
       return;
     }
 

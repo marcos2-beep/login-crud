@@ -1,6 +1,5 @@
 import { TaskForm } from "@/components/tasks/task-form";
 import Button from "@/components/ui/button";
-import { Task } from "@/constants/types";
 import { todoService } from "@/services/todo.service";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
@@ -59,11 +58,36 @@ export default function AddTaskScreen() {
         return;
       }
 
-      const coordinates = await Location.getCurrentPositionAsync({});
-      const location = {
-        latitude: coordinates.coords.latitude,
-        longitude: coordinates.coords.longitude,
+      const servicesEnabled = await Location.hasServicesEnabledAsync();
+      if (!servicesEnabled) {
+        Alert.alert(
+          "Ubicación desactivada",
+          "Activa los servicios de ubicación del dispositivo o emulador."
+        );
+        return;
+      }
+
+      // Coordenadas por defecto para desarrollo en caso de que falle el GPS
+      let location = {
+        latitude: -33.4489, // Santiago (fallback)
+        longitude: -70.6693,
       };
+
+      try {
+        const coordinates = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        });
+
+        location = {
+          latitude: coordinates.coords.latitude,
+          longitude: coordinates.coords.longitude,
+        };
+      } catch (locationError) {
+        console.warn(
+          "No se pudo obtener la ubicación actual, usando coordenadas por defecto:",
+          locationError
+        );
+      }
 
       await todoService.createTodo(user.token, title.trim(), photoUri, location);
 
