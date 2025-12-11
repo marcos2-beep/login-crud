@@ -11,7 +11,9 @@ interface TaskItemCardProps {
 }
 
 export function TaskItemCard({ item, onToggle, onDelete }: TaskItemCardProps) {
+  const [imageError, setImageError] = React.useState(false);
   return (
+
     <View
       style={[
         styles.taskCard,
@@ -33,23 +35,14 @@ export function TaskItemCard({ item, onToggle, onDelete }: TaskItemCardProps) {
         </Text>
       ) : null}
 
-      {item.photoUri ? (
-        item.photoUri.startsWith("http")
-          ? (
-            // Si viene del backend, mostrar solo la URL como texto
-            <Text style={{ fontSize: 12, color: "#555" }}>
-              Imagen: {item.photoUri}
-            </Text>
-          )
-          : (
-            // Si es una URI local del dispositivo, mostrar la imagen
-            <Image
-              source={{ uri: item.photoUri }}
-              style={{ width: 120, height: 180, borderRadius: 8, alignSelf: "center", marginBottom: 12 }}
-            />
-          )
+      {item.photoUri && !imageError ? (
+        <Image
+          source={{ uri: item.photoUri }}
+          style={{ width: 120, height: 180, borderRadius: 8, alignSelf: "center", marginBottom: 12 }}
+          onError={() => setImageError(true)} // Si falla la carga se muestra mensaje "sin imagen"
+        />
       ) : (
-        <Text style={{ fontSize: 12, color: "gray" }}>
+        <Text style={{ fontSize: 12, color: "gray", textAlign: "center", marginBottom: 12 }}>
           Sin imagen
         </Text>
       )}
