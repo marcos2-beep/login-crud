@@ -1,9 +1,9 @@
 import { User } from '@/constants/types';
 import { authService } from '@/services/auth.service';
 import {
-    clearSessionFromStorage,
-    loadSessionFromStorage,
-    saveSessionToStorage,
+  clearSessionFromStorage,
+  loadSessionFromStorage,
+  saveSessionToStorage,
 } from '@/utils/storage';
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 
@@ -55,7 +55,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     } catch (error: any) {
       console.error("Login error:", error);
       
-      // --- Manejo de JSON inválido/servidor caído ---
+      //Manejo de JSON inválido/servidor caído
       const message = String(error);
 
       if (
@@ -69,7 +69,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
           error: "El servidor no responde o devolvió una respuesta inválida."
         };
       }
-      // ------------------------------------------------------------
       return { success: false, error: error.message || "Error al iniciar sesión" };
     }
   };
@@ -91,7 +90,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth debe usarse dentro de un AuthProvider');
   }
   return context;
 }

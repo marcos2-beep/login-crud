@@ -56,12 +56,6 @@ export function TaskItemCard({ item, onToggle, onDelete }: TaskItemCardProps) {
 
       {/* <Image source={{ uri: item.photoUri }} style={styles.taskImage} /> */}
 
-      {/* {item.photoUri ? (
-        <Image source={{ uri: item.photoUri }} style={styles.taskImage} />
-      ) : (
-        <Text style={styles.taskMeta}>No hay imagen disponible</Text>
-      )} */}
-
       <View style={styles.taskActions}>
         <ToggleTaskButton
           completed={item.completed} onPress={() => onToggle(item.id)}

@@ -4,7 +4,7 @@ import { Task } from "@/constants/types";
 import { todoService } from "@/services/todo.service";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../components/context/auth-context";
 
@@ -14,21 +14,20 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(false);
 
   const reloadTasks = useCallback(async () => {
-    console.log("🔍 HomeScreen - User state:", user);
+    console.log("HomeScreen - Estado del usuario:", user);
     if (!user || !user.token) {
-      console.log("❌ No user or token, clearing tasks");
+      console.log("No hay usuario o token, limpiando tareas");
       setTasks([]);
       return;
     }
-    console.log("✅ User authenticated, fetching todos...");
+    console.log("Usuario autenticado, obteniendo tareas");
     setLoading(true);
     try {
       const fetchedTodos = await todoService.getTodos(user.token);
-      console.log("📋 Fetched todos:", fetchedTodos);
+      console.log("Tareas obtenidas::", fetchedTodos);
       setTasks(fetchedTodos);
     } catch (err) {
-      console.error("❌ Error reloading tasks:", err);
-      // Optional: Show error to user
+      console.error("Error al obtener las tareas", err);
     } finally {
       setLoading(false);
     }
@@ -50,7 +49,6 @@ export default function HomeScreen() {
     const taskToUpdate = tasks.find(t => t.id === taskId);
     if (!taskToUpdate) return;
 
-    // Optimistic update
     const previousTasks = [...tasks];
     const updated = tasks.map((task) =>
       task.id === taskId ? { ...task, completed: !task.completed } : task
@@ -60,8 +58,7 @@ export default function HomeScreen() {
     try {
       await todoService.updateTodo(user.token, taskId, { completed: !taskToUpdate.completed });
     } catch (error) {
-      console.error("Error updating task:", error);
-      // Revert on error
+      console.error("Error al actualizar las tareas", error);
       setTasks(previousTasks);
     }
   };
@@ -69,7 +66,6 @@ export default function HomeScreen() {
   const handleDeleteTask = async (taskId: string) => {
     if (!user?.token) return;
 
-    // Optimistic update
     const previousTasks = [...tasks];
     const updated = tasks.filter((task) => task.id !== taskId);
     setTasks(updated);
@@ -77,8 +73,7 @@ export default function HomeScreen() {
     try {
       await todoService.deleteTodo(user.token, taskId);
     } catch (error) {
-      console.error("Error deleting task:", error);
-      // Revert on error
+      console.error("Error al eliminar la tarea:", error);
       setTasks(previousTasks);
     }
   };

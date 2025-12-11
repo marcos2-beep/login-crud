@@ -15,7 +15,7 @@ export default function LoginScreen() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin = async () => {
-    setErrorMsg(""); // Clear previous errors
+    setErrorMsg("");
     console.log("Login button pressed");
     const result = await signIn(email, password);
     console.log("Sign in result:", result);

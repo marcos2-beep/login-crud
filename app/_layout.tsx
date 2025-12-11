@@ -13,7 +13,7 @@ function RootLayoutNav() {
   }, []);
 
   useEffect(() => {
-    if (!mounted) return; // Don't navigate until mounted
+    if (!mounted) return;
 
     const isAuthenticated = !!user?.token;
     const isPublicRoute =
